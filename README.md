@@ -1,6 +1,6 @@
 # System Allocation and Management App
 
-A **Java-based desktop application** for managing system allocation and complaints in an organization. Built using **Java**, **JDBC**, and **MySQL**, the app allows admins to allocate systems to employees and track complaints efficiently.
+A **Java-based Web application** for managing system allocation and complaints in an organization. Built using **Java**, **JDBC**, and **MySQL**, the app allows admins to allocate systems to employees and track complaints efficiently.
 
 ---
 
@@ -89,9 +89,6 @@ Contributions are welcome! Please follow these steps:
 
 5. Create a Pull Request on GitHub.
 
-## License
-
-## License
 ## License
 This project is licensed under the [MIT License](LICENSE).
 
