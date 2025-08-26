@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Employee Details</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --secondary-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --accent-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --dark-gradient: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Floating orbs */
+        .floating-orb {
+            position: fixed;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            animation: floatOrb 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-orb:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-orb:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            right: 10%;
+            animation-delay: 5s;
+        }
+
+        .floating-orb:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 10s;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translateY(0px) translateX(0px) scale(1); opacity: 0.7; }
+            33% { transform: translateY(-30px) translateX(30px) scale(1.1); opacity: 0.9; }
+            66% { transform: translateY(20px) translateX(-20px) scale(0.9); opacity: 0.5; }
+        }
+
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            border-radius: 30px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            padding: 50px;
+            width: 100%;
+            max-width: 700px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: slideInScale 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .dashboard-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg at 50% 50%, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: rotate 20s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes slideInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--accent-gradient);
+            border-radius: 10px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 5px rgba(250, 112, 154, 0.5); }
+            to { box-shadow: 0 0 20px rgba(250, 112, 154, 0.8); }
+        }
+
+        .dashboard-header h2 {
+            color: white;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff 0%, #f0f8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
+            animation: textShine 3s ease-in-out infinite;
+        }
+
+        @keyframes textShine {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .dashboard-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        .dashboard-header i {
+            font-size: 3rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            display: block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-label i {
+            margin-right: 10px;
+            color: #ffd700;
+            font-size: 1.2rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 18px 24px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-primary);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 
+                0 15px 35px rgba(102, 126, 234, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .form-input:hover, .form-select:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin-top: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checkbox-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+        }
+
+        .checkbox-item:hover::before {
+            left: 100%;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            margin-right: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .checkbox-item input[type="checkbox"]:checked {
+            background: var(--accent-gradient);
+            border-color: transparent;
+            transform: scale(1.1);
+        }
+
+        .checkbox-item input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .checkbox-item label {
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            flex-grow: 1;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            margin-top: 20px;
+            box-shadow: 
+                0 10px 30px rgba(250, 112, 154, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 
+                0 20px 40px rgba(250, 112, 154, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:active {
+            transform: translateY(-2px) scale(1.01);
+        }
+
+        .submit-btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .submit-btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            margin: -12.5px 0 0 -12.5px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 30px 25px;
+                margin: 10px;
+                border-radius: 25px;
+            }
+
+            .dashboard-header h2 {
+                font-size: 2.2rem;
+            }
+
+            .dashboard-header i {
+                font-size: 2.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+
+            .form-input, .form-select {
+                padding: 15px 20px;
+                font-size: 1rem;
+            }
+
+            .submit-btn {
+                padding: 18px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Success animation */
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .success {
+            animation: successPulse 0.6s ease;
+        }
+
+        /* Particle effect for interactions */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #ffd700;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 2s ease-out forwards;
+            z-index: 1000;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating orbs -->
+    <div class="floating-orb"></div>
+    <div class="floating-orb"></div>
+    <div class="floating-orb"></div>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <i class="fas fa-desktop"></i>
+            <h2>Admin Dashboard</h2>
+            <p>Employee System Allocation Portal</p>
+        </div>
+
+        <form action="AllocateServlet" method="post" id="employeeForm">
+            <div class="form-group">
+                <label class="form-label" for="employeeName">
+                    <i class="fas fa-user"></i>
+                    Employee Name
+                </label>
+                <input type="text" id="employeeName" name="employeeName" class="form-input" required placeholder="Enter employee full name">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="designation">
+                    <i class="fas fa-briefcase"></i>
+                    Job Designation
+                </label>
+                <input type="text" id="designation" name="designation" class="form-input" required placeholder="e.g. Software Developer, Manager">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="systemNumber">
+                    <i class="fas fa-hashtag"></i>
+                    System Allocation Number
+                </label>
+                <input type="text" id="systemNumber" name="systemNumber" class="form-input" required placeholder="SYS-001">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="ram">
+                        <i class="fas fa-memory"></i>
+                        RAM Configuration
+                    </label>
+                    <select id="ram" name="ram" class="form-select" required>
+                        <option value="">--Select RAM--</option>
+                        <option value="4GB">4 GB</option>
+                        <option value="8GB">8 GB</option>
+                        <option value="16GB">16 GB</option>
+                        <option value="32GB">32 GB</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="processor">
+                        <i class="fas fa-microchip"></i>
+                        Processor
+                    </label>
+                    <select id="processor" name="processor" class="form-select" required>
+                        <option value="">--Select Processor--</option>
+                        <option value="Intel i3">Intel i3</option>
+                        <option value="Intel i5">Intel i5</option>
+                        <option value="Intel i7">Intel i7</option>
+                        <option value="AMD Ryzen 5">AMD Ryzen 5</option>
+                        <option value="AMD Ryzen 7">AMD Ryzen 7</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-puzzle-piece"></i>
+                    Accessories
+                </label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="printer" name="accessories" value="Printer">
+                        <label for="printer">🖨️ Printer</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="scanner" name="accessories" value="Scanner">
+                        <label for="scanner">📄 Scanner</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="mouse" name="accessories" value="Mouse">
+                        <label for="mouse">🖱️ Mouse</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="keyboard" name="accessories" value="Keyboard">
+                        <label for="keyboard">⌨️ Keyboard</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <i class="fas fa-rocket"></i> Allocate System
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Particle effect on clicks
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                document.body.removeChild(particle);
+            }, 2000);
+        }
+
+        // Add particle effect to interactive elements
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('.submit-btn, .checkbox-item, .form-input, .form-select')) {
+                for (let i = 0; i < 6; i++) {
+                    setTimeout(() => {
+                        createParticle(
+                            e.clientX + (Math.random() - 0.5) * 20,
+                            e.clientY + (Math.random() - 0.5) * 20
+                        );
+                    }, i * 100);
+                }
+            }
+        });
+
+        // Enhanced form submission with success animation
+        document.getElementById('employeeForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent actual submission for demo
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const container = document.querySelector('.dashboard-container');
+            
+            submitBtn.classList.add('loading');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            
+            setTimeout(() => {
+                submitBtn.classList.remove('loading');
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> System Allocated!';
+                submitBtn.style.background = 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)';
+                container.classList.add('success');
+                
+                // Create success particles
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(() => {
+                        createParticle(
+                            window.innerWidth / 2 + (Math.random() - 0.5) * 200,
+                            window.innerHeight / 2 + (Math.random() - 0.5) * 200
+                        );
+                    }, i * 50);
+                }
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Allocate System';
+                    submitBtn.style.background = 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)';
+                    container.classList.remove('success');
+                }, 3000);
+            }, 2500);
+        });
+
+        // Smooth focus transitions with enhanced effects
+        const inputs = document.querySelectorAll('.form-input, .form-select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-3px)';
+                this.parentElement.style.filter = 'brightness(1.1)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+                this.parentElement.style.filter = 'brightness(1)';
+            });
+        });
+
+        // Add typing animation to inputs
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                this.style.transform = 'scale(1.01)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+
+        // Checkbox animation enhancement
+        const checkboxes = document.querySelectorAll('.checkbox-item input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    this.parentElement.style.background = 'rgba(255, 255, 255, 0.25)';
+                } else {
+                    this.parentElement.style.background = 'rgba(255, 255, 255, 0.1)';
+                }
+            });
+        });
+
+        // Smooth scroll and entrance animations
+        window.addEventListener('load', function() {
+            const formGroups = document.querySelectorAll('.form-group');
+            formGroups.forEach((group, index) => {
+                setTimeout(() => {
+                    group.style.animationPlayState = 'running';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
