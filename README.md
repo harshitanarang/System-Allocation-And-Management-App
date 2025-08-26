@@ -61,7 +61,8 @@ A **Java-based Web application** for managing system allocation and complaints i
 
 
 ## Project Structure
-   
+
+```   
 System Allocation And Management App/
 ├── src/                 # Source code
 ├── bin/                 # Compiled classes
@@ -70,7 +71,7 @@ System Allocation And Management App/
 ├── .classpath           # Eclipse metadata
 ├── .project             # Eclipse metadata
 └── .settings/           # Eclipse project settings
-
+```
 
 ## Contributing
 
