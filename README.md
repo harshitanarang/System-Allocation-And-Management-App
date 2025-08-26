@@ -91,7 +91,7 @@ Contributions are welcome! Please follow these steps:
 5. Create a Pull Request on GitHub.
 
 ## License
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [License](LICENSE).
 
    
 
